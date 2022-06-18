@@ -23,11 +23,13 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final passwordConfirm = TextEditingController();
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    passwordConfirm.dispose();
 
     super.dispose();
   }
@@ -65,6 +67,18 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           controller: passwordController,
           textInputAction: TextInputAction.done,
           decoration: InputDecoration(labelText: 'Mot de passe'),
+          obscureText: true,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (value) =>
+          value != null && value.length < 6
+              ? 'Entrer un mdp valide (6 caractères max)'
+              : null,
+        ),
+        SizedBox(height: 4),
+        TextFormField(
+          controller: passwordConfirm,
+          textInputAction: TextInputAction.done,
+          decoration: InputDecoration(labelText: 'Confirmer le Mot de passe'),
           obscureText: true,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: (value) =>
@@ -117,17 +131,25 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         builder: (context) => Center(child: CircularProgressIndicator())
     );
 
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    if(passwordController.text == passwordConfirm.text){
+
+      try {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
-      );
-    }on FirebaseAuthException catch (e) {
-      print(e);
+        );
+      }on FirebaseAuthException catch (e) {
+        print(e);
 
-      Utils.showSnackBar(e.message);
+        Utils.showSnackBar(e.message);
+      }
+      navigatorKey.currentState!.popUntil((route) => route.isFirst);
+
+    } else {
+      Utils.showSnackBar('Les mot de passe ne sont pas identique');
+      navigatorKey.currentState!.popUntil((route) => route.isCurrent);
     }
 
-    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+
   }
 }

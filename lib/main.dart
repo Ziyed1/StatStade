@@ -5,6 +5,7 @@ import 'package:statstade/View/Connexion_dashboard.dart';
 import 'package:statstade/View/Accueil_dashboard.dart';
 import 'Utils.dart';
 import 'View/Authentification_dashboard.dart';
+import 'View/VerificationEmail_dashboard.dart';
 import 'firebase_options.dart';
 
 
@@ -60,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
           } else if(snapshot.hasError){
             return Center(child: Text('Un problème est survenu lors de la connexion'));
           } else if (snapshot.hasData) {
-            return HomePage();
+            return VerifyEmailPage();
           } else {
             return AuthPage();
           }

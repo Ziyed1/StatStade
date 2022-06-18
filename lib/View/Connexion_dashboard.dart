@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../main.dart';
 import '../Utils.dart';
+import 'ForgotPassword_dashboard.dart';
 
 
 class LoginWidget extends StatefulWidget {
@@ -65,12 +66,25 @@ class _LoginWidgetState extends State<LoginWidget> {
           ),
           icon: Icon(Icons.lock_open, size: 32),
           label: Text(
-            'Sign in',
+            'Connexion',
             style: TextStyle(fontSize: 24),
           ),
           onPressed: signIn,
         ),
         SizedBox(height: 24),
+        GestureDetector(
+          child: Text(
+            'Mot de passe oublié ?',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: 20,
+            ),
+          ),
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ForgotPasswordPage(),
+          )),
+        ),
         RichText(
             text: TextSpan(
               style: TextStyle(color: Colors.white, fontSize: 20),
